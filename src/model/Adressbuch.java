@@ -72,7 +72,6 @@ public class Adressbuch {
         pers.setName(name);
         pers.setAddress(address);
         pers.setTelNum(telNum);
-
         persons.add(pers);
     }
 
