@@ -29,9 +29,14 @@ public class Adressbuch {
             Scanner sc = new Scanner(new File("addressBook.csv"));
             persons.clear();
 
-            while(sc.hasNextLine()){
-                String[] data = sc.nextLine().split(";");
-                addDistinct(data[0], data[1], data[2]);
+            String line;
+            while(sc.hasNextLine() && (line = sc.nextLine()) != null){
+                String[] data = line.split(";");
+                if(data.length == 3) {
+                    if (!data[0].isEmpty() && !data[1].isEmpty() && !data[2].isEmpty() && data[0].matches("^\\p{Lu}\\p{L}*(?:[\\s-]\\p{L}*)*$") && data[1].matches("^\\p{Lu}\\p{L}*(?:[\\s-]\\p{L}*)*,?\\s\\d{3,10}$") && data[2].matches("^\\+\\d{1,3}/\\d{1,3}/\\d{7}$")) {
+                        addDistinct(data[0], data[1], data[2].replaceAll("/", " "));
+                    }
+                }
             }
             sc.close();
         }
@@ -40,17 +45,15 @@ public class Adressbuch {
         }
     }
 
+
     public void saveCSV(){
-        try {
-            FileWriter fw = new FileWriter("addressBuch.csv");
-            BufferedWriter bw = new BufferedWriter(fw);
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("addressBook.csv"))) {
 
             for(int i = 0; i < persons.size(); i++){
                 bw.write(persons.get(i).toString());
                 bw.newLine();
             }
-            bw.close();
-            fw.close();
+            System.out.println("Save successful!");
         }
         catch (Exception e) {
             e.printStackTrace();

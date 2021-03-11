@@ -13,7 +13,7 @@ public class Person {
 
         sb.append(this.name + ";");
         sb.append(this.address + ";");
-        sb.append(this.telNum);
+        sb.append(this.telNum.replaceAll("\\s", "/"));
 
         return sb.toString();
     }
